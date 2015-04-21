@@ -11,8 +11,6 @@
 
 #import "UrosWindowManager.h"
 
-#include <xcb/xproto.h>
-
 @implementation UrosWindowManager
 
 - (id) init
@@ -24,42 +22,77 @@
         return nil;
     }
 
-    
+    dpy = XOpenDisplay(NULL);
+    screen = DefaultScreen(dpy);
+    rootWindow = RootWindow(dpy, screen);
     return self;
 }
 
 -(void) RunLoop
 {
-    if (theConnection == nil)
+    if (dpy == NULL)
     {
         return;
     }
-
-    [self checkOthersWM];
+    XSetErrorHandler(&checkOthersWM);
+    XSelectInput(dpy,rootWindow,SubstructureRedirectMask | SubstructureNotifyMask);
+    XSync(dpy,false);
     NSLog(@"Uroswm: Connected");
+    
+    //Main run loop
+    
+    for(;;)
+    {
+        XEvent anEvent;
+        XNextEvent(dpy, &anEvent);
+        NSLog(@"Received event %d", anEvent.type);
+        
+        switch (anEvent.type) 
+        {
+          case CreateNotify:
+                   [self handleCreateNotifyEvent:anEvent];
+                   break;
+          case DestroyNotify:
+                   [self handleDestroyNotifyEvent:anEvent];
+                   break;
+          case ReparentNotify:
+                   [self handleReparentNotifyEvent:anEvent];
+                   break;
+          default:
+                   NSLog(@"Event still not handled");
+        }
+    }
+    
 }
 
--(void) checkOthersWM
+int checkOthersWM(Display* display, XErrorEvent* error)
 {
-    xcb_generic_error_t *error;
-    XCBWindow *rootWindow = [[[theConnection screens] objectAtIndex:0] rootWindow];
-    
-    //NSLog(@"The rootWindow %@", rootWindow);
-    uint32_t mask = XCB_CW_EVENT_MASK;
-    uint32_t values[2];
-    values[0] = XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT;
-    xcb_void_cookie_t cookie = xcb_change_window_attributes_checked([theConnection connection], [rootWindow xcbWindowId], mask, values);
-    error = xcb_request_check([theConnection connection], cookie);
-    
-    if (error != NULL && error->error_code == XCB_ACCESS)
+    if (error != NULL && error->error_code == BadAccess)
     {
         NSLog(@"Uroswm: Another window manager is running!");
-        free(error);
         exit(EXIT_FAILURE);
     }
-//check if the code below is correct, for now it works
-    //values[0] = 1;CHECK ON THE MANUAL: it should be done in this way, but I don't get the expected beahvior
-    values[0] = XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY | XCB_EVENT_MASK_KEY_PRESS;
-    xcb_change_window_attributes_checked([theConnection connection], [rootWindow xcbWindowId], mask, values);
+    return 0;
+}
+
+
+- (Display*) display
+{
+    return dpy;
+}
+
+- (void) handleCreateNotifyEvent:(XEvent)theEvent
+{
+    NSLog(@"The Create event to handle: %d", theEvent.type);
+}
+
+- (void) handleDestroyNotifyEvent:(XEvent)theEvent
+{
+    NSLog(@"The Destroy event to handle: %d", theEvent.type);
+}
+
+- (void) handleReparentNotifyEvent:(XEvent)theEvent
+{
+    NSLog(@"The Reparent event to handle: %d", theEvent.type);
 }
 @end

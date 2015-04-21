@@ -27,15 +27,34 @@ Resources/Version \
 
 
 #
+# Header files
+#
+uroswm_HEADER_FILES = \
+UrosWindowManager.h \
+URNotificationHandler.h
+
+#
+# Objective-C Class files
+#
+uroswm_OBJC_FILES = \
+UrosWindowManager.m \
+URNotificationHandler.m
+
+#
 # Other sources
 #
 uroswm_OBJC_FILES += \
 main.m 
 
+# Additional flags to pass to Objective C compiler
+ADDITIONAL_OBJCFLAGS += -g -std=c99 -fobjc-arc
+
+# Additional flags to pass to C compiler
+ADDITIONAL_LDFLAGS += -lX11
+
 #
 # Makefiles
 #
--include GNUmakefile.preamble
 include $(GNUSTEP_MAKEFILES)/aggregate.make
 include $(GNUSTEP_MAKEFILES)/tool.make
 -include GNUmakefile.postamble

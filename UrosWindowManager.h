@@ -13,23 +13,37 @@
 #define _UROSWINDOWMANAGER_H_
 
 #import <Foundation/Foundation.h>
+#include <X11/Xlib.h>
+
+//int checkOthersWM(Display* display, XErrorEvent* error);
 
 @interface UrosWindowManager : NSObject
 {
-    XCBConnection *theConnection;
+    //XCBConnection *theConnection;
     /*useless for now. I can use it if I want to replace the running one
     *so I can continue the ececution of uroswm using NSException to replace the
     *running one
     */
     //BOOL anotherWmIsRunning; 
-  
+    Display *dpy;
+    Window rootWindow;
+    int screen;
 }
 
 - (void) RunLoop;
 /**
  * This method checks if another window manager is running
  */
-- (void) checkOthersWM;
+
+- (Display*) display;
+
+int checkOthersWM(Display* display, XErrorEvent* error);
+
+// Notify handling. These methods could be swtiched to return a BOOL value
+
+- (void) handleCreateNotifyEvent:(XEvent)theEvent;
+- (void) handleDestroyNotifyEvent:(XEvent)theEvent;
+- (void) handleReparentNotifyEvent:(XEvent)theEvent;
 @end
 
 #endif // _UROSWINDOWMANAGER_H_
