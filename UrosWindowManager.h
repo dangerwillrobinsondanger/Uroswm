@@ -13,6 +13,7 @@
 #define _UROSWINDOWMANAGER_H_
 
 #import <Foundation/Foundation.h>
+#import "URNotificationHandler.h"
 #include <X11/Xlib.h>
 
 //int checkOthersWM(Display* display, XErrorEvent* error);
@@ -28,6 +29,7 @@
     Display *dpy;
     Window rootWindow;
     int screen;
+    URNotificationHandler *notificationHandler;
 }
 
 - (void) RunLoop;
@@ -39,11 +41,6 @@
 
 int checkOthersWM(Display* display, XErrorEvent* error);
 
-// Notify handling. These methods could be swtiched to return a BOOL value
-
-- (void) handleCreateNotifyEvent:(XEvent)theEvent;
-- (void) handleDestroyNotifyEvent:(XEvent)theEvent;
-- (void) handleReparentNotifyEvent:(XEvent)theEvent;
 @end
 
 #endif // _UROSWINDOWMANAGER_H_

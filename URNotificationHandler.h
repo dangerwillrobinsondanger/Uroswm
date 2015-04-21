@@ -19,8 +19,23 @@
 
 #import <Foundation/Foundation.h>
 
-@interface URNotificationHandler : NSObject
+#include <X11/Xlib.h>
 
+@interface URNotificationHandler : NSObject
+{
+    Display *display;
+}
+
+-(id)initWithDisplay:(Display*)disp;
+
+// Notify handling. These methods could be swtiched to return a BOOL value
+
+- (void) handleCreateNotifyEvent:(XEvent)theEvent;
+- (void) handleDestroyNotifyEvent:(XEvent)theEvent;
+- (void) handleReparentNotifyEvent:(XEvent)theEvent;
+- (void) handleMapNotifyEvent:(XEvent)theEvent;
+- (void) handleMapRequestEvent:(XEvent)theEvent;
+- (void) handleConfigureRequestEvent:(XEvent)theEvent;
 @end
 
-#endif _URNOTIFICATIONHANDLER_H_
+#endif // _URNOTIFICATIONHANDLER_H_

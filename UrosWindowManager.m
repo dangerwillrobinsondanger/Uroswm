@@ -25,6 +25,7 @@
     dpy = XOpenDisplay(NULL);
     screen = DefaultScreen(dpy);
     rootWindow = RootWindow(dpy, screen);
+    notificationHandler = [[URNotificationHandler alloc] initWithDisplay:dpy];
     return self;
 }
 
@@ -37,7 +38,7 @@
     XSetErrorHandler(&checkOthersWM);
     XSelectInput(dpy,rootWindow,SubstructureRedirectMask | SubstructureNotifyMask);
     XSync(dpy,false);
-    NSLog(@"Uroswm: Connected");
+    NSLog(@"Uroswm: Connected %lu", rootWindow);
     
     //Main run loop
     
@@ -50,13 +51,21 @@
         switch (anEvent.type) 
         {
           case CreateNotify:
-                   [self handleCreateNotifyEvent:anEvent];
+                   [notificationHandler handleCreateNotifyEvent:anEvent];
                    break;
           case DestroyNotify:
-                   [self handleDestroyNotifyEvent:anEvent];
+                   [notificationHandler handleDestroyNotifyEvent:anEvent];
                    break;
           case ReparentNotify:
-                   [self handleReparentNotifyEvent:anEvent];
+                   [notificationHandler handleReparentNotifyEvent:anEvent];
+                   break;
+          case MapNotify:
+                   break;
+          case MapRequest:
+                   [notificationHandler handleMapRequestEvent:anEvent];
+                   break;
+          case ConfigureRequest:
+                   [notificationHandler handleConfigureRequestEvent:anEvent];
                    break;
           default:
                    NSLog(@"Event still not handled");
@@ -81,18 +90,4 @@ int checkOthersWM(Display* display, XErrorEvent* error)
     return dpy;
 }
 
-- (void) handleCreateNotifyEvent:(XEvent)theEvent
-{
-    NSLog(@"The Create event to handle: %d", theEvent.type);
-}
-
-- (void) handleDestroyNotifyEvent:(XEvent)theEvent
-{
-    NSLog(@"The Destroy event to handle: %d", theEvent.type);
-}
-
-- (void) handleReparentNotifyEvent:(XEvent)theEvent
-{
-    NSLog(@"The Reparent event to handle: %d", theEvent.type);
-}
 @end
