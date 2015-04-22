@@ -1,7 +1,5 @@
-Uroswm is a window manager written in objective-c on GNUstep, with xcb using XCBKit.
+Uroswm is a window manager written in objective-c on GNUstep,with Xlib.
 ===========
-
-XCBKit is a framework built on top of xcb <br />
 
 Goals: <br />
 
@@ -15,8 +13,7 @@ Build: <br />
 ======
 To build uroswm you need to install: <br />
 
-1) xcb <br />
-2) XCBKit <br />
+1) Xlib <br />
 
 In the uroswm folder type: <br />
 
@@ -32,12 +29,6 @@ $ Xephyr -ac -screen 800x600 -reset :1 & <br />
 $ DISPLAY=:1 <br />
 $ cd obj <br />
 $ ./uroswm & <br />
-
-You can also use -GNU-Debug, to see some nice debug output, to do this: <br />
-
-$ ./uroswm --GNU-Debug=XCBConnection & <br />
-
-Note that I put XCBConnection as an example, you can put any class that uses NSDebugLog <br /> (and variants) <br />
 
 ===========
 
