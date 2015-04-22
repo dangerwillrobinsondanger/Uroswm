@@ -53,13 +53,17 @@
           case CreateNotify:
                    [notificationHandler handleCreateNotifyEvent:anEvent];
                    break;
-          case DestroyNotify:
+          case DestroyNotify: //17
                    [notificationHandler handleDestroyNotifyEvent:anEvent];
                    break;
-          case ReparentNotify:
+          case ReparentNotify: //21
                    [notificationHandler handleReparentNotifyEvent:anEvent];
                    break;
-          case MapNotify:
+          case UnmapNotify: //18
+                   NSLog(@"Unmap Notify received. handle it!");
+                   break;
+          case MapNotify: //19
+                   NSLog(@"Map Notify received! handle it");
                    break;
           case MapRequest:
                    [notificationHandler handleMapRequestEvent:anEvent];

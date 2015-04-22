@@ -10,6 +10,7 @@
 */
 
 #import "URNotificationHandler.h"
+#import "URWindow.h"
 
 @implementation URNotificationHandler
 
@@ -48,15 +49,15 @@
 - (void) handleMapRequestEvent:(XEvent)theEvent
 {
     XMapRequestEvent mapRequestEvent = theEvent.xmaprequest;
-    Window win = mapRequestEvent.window;
-    XMapWindow(display,win);
+    URWindow *win = [[URWindow alloc] initWithXWindow:mapRequestEvent.window display:display];
+    [win mapWindow];
     //XFlush(display); seems unnecessary
 }
 
 - (void) handleConfigureRequestEvent:(XEvent)theEvent
 {
     XConfigureRequestEvent configureRequestEvent = theEvent.xconfigurerequest;
-    Window win = configureRequestEvent.window;
+    URWindow *win = [[URWindow alloc] initWithXWindow:configureRequestEvent.window display:display];
     XWindowChanges xWinChanges;
     xWinChanges.x = configureRequestEvent.x;
     xWinChanges.y = configureRequestEvent.y;
@@ -65,7 +66,7 @@
     xWinChanges.border_width = configureRequestEvent.border_width;
     xWinChanges.sibling = configureRequestEvent.above;
     xWinChanges.stack_mode = configureRequestEvent.detail;
-    XConfigureWindow(display,win,configureRequestEvent.value_mask,&xWinChanges);
+    XConfigureWindow(display,[win xWindow],configureRequestEvent.value_mask,&xWinChanges);
 }
 
 @end

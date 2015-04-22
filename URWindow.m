@@ -30,9 +30,9 @@
     return self;
 }
 
-- (void) mapWindow:(URWindow*)window
+- (void) mapWindow
 {
-    XMapWindow(dpy,[window xWindow]);
+    XMapWindow(dpy,xWindow);
 }
 
 - (Window) xWindow
@@ -45,7 +45,7 @@
     return frameWindow;
 }
 
--(void)createFrameForWindow(URWindow)window
+-(void)createFrameForWindow:(URWindow*)window
 {
     unsigned int BORDER_WIDTH = 3;
     unsigned long BORDER_COLOR = 0xff0000;
@@ -56,7 +56,7 @@
     frameWindow = XCreateSimpleWindow(dpy,rootWindow,windowAttributes.x,
                                                      windowAttributes.y,
                                                      windowAttributes.width,
-                                                     windowAttrobites.height,
+                                                     windowAttributes.height,
                                                      BORDER_WIDTH,
                                                      BORDER_COLOR,
                                                      BG_COLOR);

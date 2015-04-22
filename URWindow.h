@@ -31,10 +31,15 @@
 /**
   * This method map the window to the X server, to be shown on the screen
   */
--(void) mapWindow:(URWindow *)window;
+-(void) mapWindow;
 
 /**
  * This method create a frame window, reparenting the window passed as argument
  */
  -(void)createFrameForWindow:(URWindow*)window;
+ 
+ /**
+  * This method configures a window using
+  */
+//-(void)configureWindow:(URWindow*)win display:(Display*)disp;
 @end
