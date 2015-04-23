@@ -27,11 +27,17 @@
 //URWindow get attributes.
 - (Window) xWindow;
 - (Window) frameWindow;
+- (Window) rootWindow;
 
 /**
   * This method map the window to the X server, to be shown on the screen
   */
 -(void) mapWindow;
+
+/**
+ * This method unmapt the X window
+ */
+-(void) unmapWindow;
 
 /**
  * This method create a frame window, reparenting the window passed as argument

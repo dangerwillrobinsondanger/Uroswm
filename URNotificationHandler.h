@@ -24,9 +24,13 @@
 @interface URNotificationHandler : NSObject
 {
     Display *display;
+    NSMutableDictionary *windowsDict;
+    Window rootWindow;
 }
 
 -(id)initWithDisplay:(Display*)disp;
+
+-(NSMutableDictionary*)windowsDictionary;
 
 // Notify handling. These methods could be swtiched to return a BOOL value
 
@@ -36,6 +40,7 @@
 - (void) handleMapNotifyEvent:(XEvent)theEvent;
 - (void) handleMapRequestEvent:(XEvent)theEvent;
 - (void) handleConfigureRequestEvent:(XEvent)theEvent;
+- (void) handleUnmapNotifyEvent:(XEvent)theEvent;
 @end
 
 #endif // _URNOTIFICATIONHANDLER_H_

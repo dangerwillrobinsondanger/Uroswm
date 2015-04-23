@@ -35,10 +35,16 @@
     XMapWindow(dpy,xWindow);
 }
 
+- (void) unmapWindow
+{
+    XUnmapWindow(dpy,xWindow);
+}
+
 - (Window) xWindow
 {
     return xWindow;
 }
+
 
 -(Window) frameWindow
 {
@@ -86,5 +92,9 @@
                 None,
                None);
     framed = YES;
+}
+- (Window) rootWindow
+{
+    return rootWindow;
 }
 @end

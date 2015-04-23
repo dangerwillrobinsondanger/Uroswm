@@ -50,20 +50,21 @@
         
         switch (anEvent.type) 
         {
-          case CreateNotify:
-                   [notificationHandler handleCreateNotifyEvent:anEvent];
+          case CreateNotify: //16
+                   //[notificationHandler handleCreateNotifyEvent:anEvent];
                    break;
           case DestroyNotify: //17
-                   [notificationHandler handleDestroyNotifyEvent:anEvent];
+                   //[notificationHandler handleDestroyNotifyEvent:anEvent];
                    break;
           case ReparentNotify: //21
-                   [notificationHandler handleReparentNotifyEvent:anEvent];
+                  // [notificationHandler handleReparentNotifyEvent:anEvent];
                    break;
           case UnmapNotify: //18
-                   NSLog(@"Unmap Notify received. handle it!");
+                   [notificationHandler handleUnmapNotifyEvent:anEvent];
                    break;
           case MapNotify: //19
                    NSLog(@"Map Notify received! handle it");
+                  // [notificationHandler handleMapNotifyEvent:anEvent];
                    break;
           case MapRequest:
                    [notificationHandler handleMapRequestEvent:anEvent];
