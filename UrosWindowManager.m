@@ -73,6 +73,12 @@
           case ConfigureRequest:
                    [notificationHandler handleConfigureRequestEvent:anEvent];
                    break;
+          case ButtonPress:
+                   [notificationHandler handleButtonPressEvent:anEvent];
+                   break;
+          case MotionNotify:
+                   [notificationHandler handleMotionNotifyEvent:anEvent];
+                    break;
           default:
                    NSLog(@"Event still not handled");
         }

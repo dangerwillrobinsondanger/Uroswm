@@ -128,16 +128,59 @@
        NSLog(@"Ignore pre-existing reparented window");
        return;
     }
-    //NSLog(@"i valoru %lu e frame %lu", [win xWindow], [win frameWindow]);
+
     XUnmapWindow(display, [frameWindow xWindow]);
     XReparentWindow(display,unmapNotifyEvent.window,rootWindow,0,0);
-    //sleep(5);
-    //XMapWindow(display,[win frameWindow]);
     XRemoveFromSaveSet(display,unmapNotifyEvent.window);
-    //XDestroyWindow(display, [win frameWindow]);
-    //NSLog(@"destroyed? %lu e frame %lu", [win xWindow], [win frameWindow]);
     [windowsDict removeObjectForKey:[NSString stringWithFormat:@"%lu",unmapNotifyEvent.window]];
     NSLog(@"Il dizionario è modificato? %@", windowsDict);
+}
+
+- (void)handleButtonPressEvent:(XEvent)theEvent
+{
+    XButtonEvent buttonEvent = theEvent.xbutton;
+    URFrame *frameWindow = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",buttonEvent.window]];
+    
+    if (!frameWindow)
+        return;
+    //get the mouse starting location
+    startMousePosition = NSMakePoint(buttonEvent.x_root, buttonEvent.y_root);
+    //now check some geometry and get frame starting position
+    int x,y;
+    Window reRootWindow; //this is the same of rootWindow;look for better implementation here.
+    unsigned width, height, border_width, depth;
+    XGetGeometry(display,[frameWindow xWindow],&reRootWindow,&x, &y,&width, &height,&border_width,&depth);
+    NSLog(@"Sono la stessa finestra? %d", reRootWindow == rootWindow);
+    startFramePosition = NSMakePoint(x,y);
+    frameSize = NSMakeSize(width,height);
+    
+    XRaiseWindow(display, [frameWindow xWindow]);
+}
+
+- (void) handleMotionNotifyEvent:(XEvent)theEvent
+{
+    XMotionEvent motionEvent = theEvent.xmotion;
+    URFrame *frameWindow = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",motionEvent.window]];
+    
+    if(!frameWindow)
+        return;
+    
+    NSPoint dragPosition = NSMakePoint(motionEvent.x_root,motionEvent.y_root);
+    NSPoint delta = [self calculateDeltaPosition:dragPosition startingPosition:startMousePosition];
+    
+    //move the window
+    if (motionEvent.state & Button1Mask)
+    {
+        NSPoint destPosition = NSMakePoint(startFramePosition.x+delta.x,startFramePosition.y+delta.y);
+        XMoveWindow(display,[frameWindow xWindow],destPosition.x, destPosition.y);
+    }    
+    
+}
+
+-(NSPoint)calculateDeltaPosition:(NSPoint)dragPosition startingPosition:(NSPoint)startPosition
+{
+    NSPoint delta = NSMakePoint(dragPosition.x-startPosition.x, dragPosition.y-startPosition.y);
+    return delta;
 }
 
 @end

@@ -26,6 +26,12 @@
     Display *display;
     NSMutableDictionary *windowsDict;
     Window rootWindow;
+    
+    //mouse positions
+    NSPoint startMousePosition;
+    //frame position
+    NSPoint startFramePosition;
+    NSSize frameSize;
 }
 
 -(id)initWithDisplay:(Display*)disp;
@@ -41,6 +47,8 @@
 - (void) handleMapRequestEvent:(XEvent)theEvent;
 - (void) handleConfigureRequestEvent:(XEvent)theEvent;
 - (void) handleUnmapNotifyEvent:(XEvent)theEvent;
+- (void) handleButtonPressEvent:(XEvent)theEvent;
+- (void) handleMotionNotifyEvent:(XEvent)theEvent;
 @end
 
 #endif // _URNOTIFICATIONHANDLER_H_

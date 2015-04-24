@@ -29,7 +29,7 @@
     Display *dpy;
     Window rootWindow;
     int screen;
-    URNotificationHandler *notificationHandler;
+    URNotificationHandler *notificationHandler;    
 }
 
 - (void) RunLoop;
