@@ -33,21 +33,28 @@
     return windowsDict;
 }
 
-- (void) handleCreateNotifyEvent:(XEvent)theEvent
+/*- (void) handleCreateNotifyEvent:(XEvent)theEvent
 {
     NSLog(@"The Create event to handle: %d", theEvent.type);
     XCreateWindowEvent createEvent = theEvent.xcreatewindow;
     URWindow *win = [[URWindow alloc] initWithXWindow:createEvent.window display:display];
     NSString *key = [NSString stringWithFormat:@"%lu",createEvent.window];
     //[windowsDict setObject:win forKey:key];
-}
+}*/
 
 - (void) handleDestroyNotifyEvent:(XEvent)theEvent
 {
+    NSLog(@"Destroy handleing %@!!", windowsDict);
     XDestroyWindowEvent destroyEvent = theEvent.xdestroywindow;
     URWindow *win = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",destroyEvent.window]];
-    XUnmapSubwindows(display, [win frameWindow]);
-    XUnmapWindow(display,[win frameWindow]);
+    if (win == nil)
+    {
+       NSLog(@"Nil window in destroy");
+       return;
+    }
+
+    //XUnmapSubwindows(display, [win frameWindow]);
+    //XUnmapWindow(display,[win frameWindow]);
     //XReparentWindow(display,[win xWindow],[win rootWindow],0,0);
     XDestroySubwindows(display, [win frameWindow]);
     XDestroyWindow(display, [win frameWindow]);
@@ -61,14 +68,14 @@
     XReparentWindow(display,[win xWindow], [win rootWindow],0,0);*/
 }
 
-- (void) handleMapNotifyEvent:(XEvent)theEvent
-{
+/*- (void) handleMapNotifyEvent:(XEvent)theEvent
+/
     NSLog(@"The MapNotify event to handle: %d", theEvent.type);
     XMapEvent mapEvent = theEvent.xmap;
     URWindow *win = [[URWindow alloc] initWithXWindow:mapEvent.window display:display];
     NSString *key = [NSString stringWithFormat:@"%lu",mapEvent.window];
     //[windowsDict setObject:win forKey:key];
-}
+}*/
 
 - (void) handleMapRequestEvent:(XEvent)theEvent
 {
@@ -106,18 +113,16 @@
         return;
     }
 
-    /*XSelectInput(display, [win xWindow], NoEventMask);
-    XSelectInput(display, [win frameWindow], NoEventMask);*/
-    XReparentWindow(display,[win xWindow],rootWindow,0,0);
-    XUnmapWindow(display, [win xWindow]);
-    //sleep(5);
-    //XReparentWindow(display,[win frameWindow],rootWindow,0,0);
+    if (unmapNotifyEvent.event == rootWindow)
+    {
+       NSLog(@"Ignore pre-existing reparented window");
+       return;
+    }
+
     XUnmapWindow(display, [win frameWindow]);
-    //XReparentWindow(display,[win xWindow],rootWindow,0,0);
+    XReparentWindow(display,[win xWindow],rootWindow,0,0);
     XRemoveFromSaveSet(display,[win xWindow]);
-    //XDestroyWindow(display, [win frameWindow]);
-    //XDestroyWindow(display, [win xWindow]);
-    XFlush(display);
+    XDestroyWindow(display, [win frameWindow]);
     [windowsDict removeObjectForKey:[NSString stringWithFormat:@"%lu",unmapNotifyEvent.window]];
     NSLog(@"Il dizionario è modificato? %@", windowsDict);
 }

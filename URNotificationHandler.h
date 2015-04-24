@@ -34,10 +34,10 @@
 
 // Notify handling. These methods could be swtiched to return a BOOL value
 
-- (void) handleCreateNotifyEvent:(XEvent)theEvent;
+//- (void) handleCreateNotifyEvent:(XEvent)theEvent;
 - (void) handleDestroyNotifyEvent:(XEvent)theEvent;
 - (void) handleReparentNotifyEvent:(XEvent)theEvent;
-- (void) handleMapNotifyEvent:(XEvent)theEvent;
+//- (void) handleMapNotifyEvent:(XEvent)theEvent;
 - (void) handleMapRequestEvent:(XEvent)theEvent;
 - (void) handleConfigureRequestEvent:(XEvent)theEvent;
 - (void) handleUnmapNotifyEvent:(XEvent)theEvent;
