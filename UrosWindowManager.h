@@ -16,7 +16,7 @@
 #import "URNotificationHandler.h"
 #include <X11/Xlib.h>
 
-//int checkOthersWM(Display* display, XErrorEvent* error);
+#define ERROR_LENGTH 1024
 
 @interface UrosWindowManager : NSObject
 {
@@ -40,6 +40,7 @@
 - (Display*) display;
 
 int checkOthersWM(Display* display, XErrorEvent* error);
+int handleXError(Display *display, XErrorEvent *error);
 
 @end
 

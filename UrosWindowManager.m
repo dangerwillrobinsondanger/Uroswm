@@ -39,6 +39,7 @@
     XSelectInput(dpy,rootWindow,SubstructureRedirectMask | SubstructureNotifyMask);
     XSync(dpy,false);
     NSLog(@"Uroswm: Connected %lu", rootWindow);
+    XSetErrorHandler(&handleXError);
     
     //Main run loop
     
@@ -89,7 +90,17 @@ int checkOthersWM(Display* display, XErrorEvent* error)
     return 0;
 }
 
-
+int handleXError(Display *display, XErrorEvent *error)
+{
+    char error_text[ERROR_LENGTH];
+    XGetErrorText(display,error->error_code, error_text, sizeof(error_text));
+    NSString *err = [NSString stringWithCString:error_text encoding:NSUTF8StringEncoding];
+    NSLog(@"Received X error:");
+    NSLog(@"Request number: %d.", error->request_code);
+    NSLog(@"Error code: %d, Error string: %@.",error->error_code, err);
+    NSLog(@"Resource ID: %lu", error->resourceid);
+    return 0; 
+}
 - (Display*) display
 {
     return dpy;

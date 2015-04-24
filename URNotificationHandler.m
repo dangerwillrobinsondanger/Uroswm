@@ -89,7 +89,13 @@
 - (void) handleConfigureRequestEvent:(XEvent)theEvent
 {
     XConfigureRequestEvent configureRequestEvent = theEvent.xconfigurerequest;
-    URWindow *win = [[URWindow alloc] initWithXWindow:configureRequestEvent.window display:display];
+    URWindow *win = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",configureRequestEvent.window]];
+
+    if (win == nil)
+    {
+       NSLog(@"Sono nil nel configure");
+       win = [[URWindow alloc] initWithXWindow:configureRequestEvent.window display:display];
+    }
      
     XWindowChanges xWinChanges;
     xWinChanges.x = configureRequestEvent.x;
@@ -99,6 +105,7 @@
     xWinChanges.border_width = configureRequestEvent.border_width;
     xWinChanges.sibling = configureRequestEvent.above;
     xWinChanges.stack_mode = configureRequestEvent.detail;
+    XConfigureWindow(display,[win frameWindow],configureRequestEvent.value_mask,&xWinChanges);
     XConfigureWindow(display,[win xWindow],configureRequestEvent.value_mask,&xWinChanges);
 }
 
@@ -118,9 +125,9 @@
        NSLog(@"Ignore pre-existing reparented window");
        return;
     }
-
+    NSLog(@"i valoru %lu e frame %lu", [win xWindow], [win frameWindow]);
     XUnmapWindow(display, [win frameWindow]);
-    XReparentWindow(display,[win xWindow],rootWindow,0,0);
+    //XReparentWindow(display,[win xWindow],rootWindow,0,0);
     XRemoveFromSaveSet(display,[win xWindow]);
     XDestroyWindow(display, [win frameWindow]);
     [windowsDict removeObjectForKey:[NSString stringWithFormat:@"%lu",unmapNotifyEvent.window]];
