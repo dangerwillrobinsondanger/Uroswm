@@ -11,6 +11,7 @@
 
 #import "URNotificationHandler.h"
 #import "URWindow.h"
+#import "URFrame.h"
 #include <unistd.h>
 
 @implementation URNotificationHandler
@@ -56,9 +57,9 @@
     //XUnmapSubwindows(display, [win frameWindow]);
     //XUnmapWindow(display,[win frameWindow]);
     //XReparentWindow(display,[win xWindow],[win rootWindow],0,0);
-    XDestroySubwindows(display, [win frameWindow]);
-    XDestroyWindow(display, [win frameWindow]);
-    [windowsDict removeObjectForKey:[NSString stringWithFormat:@"%lu",destroyEvent.window]];
+    //XDestroyWindow(display, [win frameWindow]);
+    //XDestroyWindow(display, [win frameWindow]);
+    //[windowsDict removeObjectForKey:[NSString stringWithFormat:@"%lu",destroyEvent.window]];
 }
 
 - (void) handleReparentNotifyEvent:(XEvent)theEvent
@@ -81,7 +82,9 @@
 {
     XMapRequestEvent mapRequestEvent = theEvent.xmaprequest;
     URWindow *win = [[URWindow alloc] initWithXWindow:mapRequestEvent.window display:display];
-    [windowsDict setObject:win forKey:[NSString stringWithFormat:@"%lu",mapRequestEvent.window]];
+    URFrame *frameWindow = [[URFrame alloc] initWithDisplay:display];
+    [frameWindow createFrameForWindow:win];
+    [windowsDict setObject:frameWindow forKey:[NSString stringWithFormat:@"%lu",[win xWindow]]];
     [win mapWindow];
     NSLog(@"Il dizionario %@", windowsDict);
 }
@@ -89,14 +92,8 @@
 - (void) handleConfigureRequestEvent:(XEvent)theEvent
 {
     XConfigureRequestEvent configureRequestEvent = theEvent.xconfigurerequest;
-    URWindow *win = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",configureRequestEvent.window]];
-
-    if (win == nil)
-    {
-       NSLog(@"Sono nil nel configure");
-       win = [[URWindow alloc] initWithXWindow:configureRequestEvent.window display:display];
-    }
-     
+    URFrame *frameWindow = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",configureRequestEvent.window]];
+    
     XWindowChanges xWinChanges;
     xWinChanges.x = configureRequestEvent.x;
     xWinChanges.y = configureRequestEvent.y;
@@ -105,16 +102,22 @@
     xWinChanges.border_width = configureRequestEvent.border_width;
     xWinChanges.sibling = configureRequestEvent.above;
     xWinChanges.stack_mode = configureRequestEvent.detail;
-    XConfigureWindow(display,[win frameWindow],configureRequestEvent.value_mask,&xWinChanges);
+    
+    if (frameWindow != nil)
+    {
+        XConfigureWindow(display, [frameWindow xWindow], configureRequestEvent.value_mask, &xWinChanges);
+    }
+    //possible errors
+    URWindow *win = [[URWindow alloc] initWithXWindow:configureRequestEvent.window display:display];
     XConfigureWindow(display,[win xWindow],configureRequestEvent.value_mask,&xWinChanges);
 }
 
 -(void)handleUnmapNotifyEvent:(XEvent)theEvent
 {
     XUnmapEvent unmapNotifyEvent = theEvent.xunmap;
-    URWindow *win = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",unmapNotifyEvent.window]];
+    URFrame *frameWindow = [windowsDict objectForKey:[NSString stringWithFormat:@"%lu",unmapNotifyEvent.window]];
     
-    if (win == nil)
+    if (frameWindow == nil)
     {
         NSLog(@"NULL WINDOW");
         return;
@@ -125,11 +128,14 @@
        NSLog(@"Ignore pre-existing reparented window");
        return;
     }
-    NSLog(@"i valoru %lu e frame %lu", [win xWindow], [win frameWindow]);
-    XUnmapWindow(display, [win frameWindow]);
-    //XReparentWindow(display,[win xWindow],rootWindow,0,0);
-    XRemoveFromSaveSet(display,[win xWindow]);
-    XDestroyWindow(display, [win frameWindow]);
+    //NSLog(@"i valoru %lu e frame %lu", [win xWindow], [win frameWindow]);
+    XUnmapWindow(display, [frameWindow xWindow]);
+    XReparentWindow(display,unmapNotifyEvent.window,rootWindow,0,0);
+    //sleep(5);
+    //XMapWindow(display,[win frameWindow]);
+    XRemoveFromSaveSet(display,unmapNotifyEvent.window);
+    //XDestroyWindow(display, [win frameWindow]);
+    //NSLog(@"destroyed? %lu e frame %lu", [win xWindow], [win frameWindow]);
     [windowsDict removeObjectForKey:[NSString stringWithFormat:@"%lu",unmapNotifyEvent.window]];
     NSLog(@"Il dizionario è modificato? %@", windowsDict);
 }

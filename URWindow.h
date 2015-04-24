@@ -16,7 +16,6 @@
 @interface URWindow : NSObject
 {
     Window xWindow;
-    Window frameWindow;
     Window rootWindow;
     Display *dpy;
     BOOL framed;
@@ -26,7 +25,6 @@
 
 //URWindow get attributes.
 - (Window) xWindow;
-- (Window) frameWindow;
 - (Window) rootWindow;
 
 /**
@@ -38,11 +36,6 @@
  * This method unmapt the X window
  */
 -(void) unmapWindow;
-
-/**
- * This method create a frame window, reparenting the window passed as argument
- */
- -(void)createFrameForWindow:(URWindow*)window;
  
  /**
   * This method configures a window using

@@ -32,7 +32,8 @@ Resources/Version \
 uroswm_HEADER_FILES = \
 UrosWindowManager.h \
 URNotificationHandler.h \
-URWindow.h
+URWindow.h \
+URFrame.h
 
 #
 # Objective-C Class files
@@ -40,7 +41,8 @@ URWindow.h
 uroswm_OBJC_FILES = \
 UrosWindowManager.m \
 URNotificationHandler.m \
-URWindow.m
+URWindow.m \
+URFrame.m
 
 #
 # Other sources
