@@ -32,6 +32,13 @@ $ ./uroswm & <br />
 
 ===========
 
+How it works
+============
+To move a window: alt + left-click and drag the window. <br />
+To resize a window: alt + right-click and drag for resizing <br />
+
+============
+
 Contribution: <br />
 =============
 Fork, write code, test it, report problems and do Pull Request or report Issues. <br />
