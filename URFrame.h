@@ -20,11 +20,20 @@
 
 @interface URFrame : URWindow
 {
+    //(Window) children of the frame window
+    NSMutableDictionary *children;
 }
 -(id)initWithDisplay:(Display*)display;
 /**
  * This method create a frame window, reparenting the window passed as argument
  */
 -(void)createFrameForWindow:(URWindow*)window;
-
+/**
+ * This method reparents the children to the frame. The argument can't be 0
+ */
+-(void)reparentChildWindow:(URWindow*)win;
+/*
+ * Returns the children dictionary
+ */
+-(NSDictionary*)children;
 @end

@@ -21,6 +21,7 @@
     if (self == nil)
         return nil;
     
+    children = [[NSMutableDictionary alloc] init];
     return self;
     
 }
@@ -42,9 +43,6 @@
                                                      BG_COLOR);
     XSelectInput(dpy,xWindow,SubstructureRedirectMask | SubstructureNotifyMask);
     XAddToSaveSet(dpy, [window xWindow]);
-    //reparenting the xWindow to frameWindow
-    XReparentWindow(dpy,[window xWindow],xWindow,0, 0);
-    [self mapWindow];
     //Move window alt + left click;
     XGrabButton(dpy,
             Button1,
@@ -67,4 +65,20 @@
                None);
 }
 
+-(void)reparentChildWindow:(URWindow*)win
+{
+    //this check can be wrong.Look better!
+    if (win == 0)
+        return;
+    
+    XReparentWindow(dpy,[win xWindow],xWindow,0, 0);
+    [children setObject:win forKey:[NSNumber numberWithInt:[win xWindow]]];
+    [self mapWindow];
+    
+}
+
+-(NSDictionary*)children
+{
+    return children;
+}
 @end
