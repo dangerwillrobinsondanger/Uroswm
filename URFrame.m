@@ -34,10 +34,13 @@
     
     XWindowAttributes windowAttributes;
     XGetWindowAttributes(dpy, [window xWindow], &windowAttributes);
+    width = windowAttributes.width;
+    height = windowAttributes.height+10;
+    
     xWindow = XCreateSimpleWindow(dpy,rootWindow,windowAttributes.x,
                                                      windowAttributes.y,
-                                                     windowAttributes.width,
-                                                     windowAttributes.height,
+                                                     width,
+                                                     height,
                                                      BORDER_WIDTH,
                                                      BORDER_COLOR,
                                                      BG_COLOR);
@@ -65,13 +68,13 @@
                None);
 }
 
--(void)reparentChildWindow:(URWindow*)win
+-(void)reparentChildWindow:(URWindow*)win atX:(int)x andY:(int)y
 {
     //this check can be wrong.Look better!
     if (win == 0)
         return;
     
-    XReparentWindow(dpy,[win xWindow],xWindow,0, 0);
+    XReparentWindow(dpy,[win xWindow],xWindow,x, y);
     [children setObject:win forKey:[NSNumber numberWithInt:[win xWindow]]];
     [self mapWindow];
     

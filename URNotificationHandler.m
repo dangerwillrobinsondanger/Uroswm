@@ -12,6 +12,8 @@
 #import "URNotificationHandler.h"
 #import "URWindow.h"
 #import "URFrame.h"
+#import "URTitleBar.h"
+
 #include <unistd.h>
 
 @implementation URNotificationHandler
@@ -63,8 +65,12 @@
     XMapRequestEvent mapRequestEvent = theEvent.xmaprequest;
     URWindow *win = [[URWindow alloc] initWithXWindow:mapRequestEvent.window display:display];
     URFrame *frameWindow = [[URFrame alloc] initWithDisplay:display];
+    URTitleBar *titleBar = [[URTitleBar alloc] initWithDisplay:display];
     [frameWindow createFrameForWindow:win];
-    [frameWindow reparentChildWindow:win];
+    [titleBar createTitleBarForFrame:frameWindow];
+    [frameWindow reparentChildWindow:win atX:0 andY:[titleBar height]];
+    [win setBrother:titleBar];
+    [frameWindow reparentChildWindow:titleBar atX:0 andY:0];
     [windowsDict setObject:frameWindow forKey:[NSString stringWithFormat:@"%lu",[win xWindow]]];
     [win mapWindow];
     NSLog(@"Il dizionario %@", windowsDict);
@@ -164,7 +170,7 @@
     }
     
 }
-
+//if this method is useless I'll remove it
 -(NSPoint)calculateDeltaPosition:(NSPoint)dragPosition startingPosition:(NSPoint)startPosition
 {
     NSPoint delta = NSMakePoint(dragPosition.x-startPosition.x, dragPosition.y-startPosition.y);

@@ -17,8 +17,11 @@
 {
     Window xWindow;
     Window rootWindow;
+    Window brother;
     Display *dpy;
     BOOL framed;
+    
+    int width, height;
 }
 
 -(id)initWithXWindow:(Window)win display:(Display*)display;
@@ -33,7 +36,7 @@
 -(void) mapWindow;
 
 /**
- * This method unmapt the X window
+ * This method unmap the X window
  */
 -(void) unmapWindow;
  
@@ -41,4 +44,18 @@
   * This method configures a window using
   */
 //-(void)configureWindow:(URWindow*)win display:(Display*)disp;
+/**
+  *This method set the brother of a window. Look at Xlib manual for: "sibling window"
+ * Return YES if the brother is successfully set; NO otherwise
+ */
+-(BOOL)setBrother:(URWindow*)aBrother;
+/**
+  * Returns the brother window
+  */
+-(Window)brother;
+
+/** Returns the height of the window */
+-(int)height;
+/** Returns the width of the window */
+-(int)width;
 @end

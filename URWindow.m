@@ -46,4 +46,28 @@
 {
     return rootWindow;
 }
+/* FIXME: For now the method return only YES. Check when can return NO on window configure errors.*/
+- (BOOL)setBrother:(URWindow*)aBrother
+{
+    brother = [aBrother xWindow];
+    XWindowChanges changes;
+    changes.sibling = brother;
+    XConfigureWindow(dpy, xWindow, CWSibling, &changes);//then the sanity check
+    return YES;
+}
+
+-(Window)brother
+{
+    return brother;    
+}
+
+-(int)height
+{
+    return height;
+}
+
+-(int)width
+{
+    return width;
+}
 @end

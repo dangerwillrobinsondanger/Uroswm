@@ -30,8 +30,10 @@
 -(void)createFrameForWindow:(URWindow*)window;
 /**
  * This method reparents the children to the frame. The argument can't be 0
+ * The x and y arguments are the coordinates where the window will be placed
+ * inside the frame.
  */
--(void)reparentChildWindow:(URWindow*)win;
+-(void)reparentChildWindow:(URWindow*)win atX:(int)x andY:(int)y;
 /*
  * Returns the children dictionary
  */
