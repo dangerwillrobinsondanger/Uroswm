@@ -68,6 +68,7 @@
     URTitleBar *titleBar = [[URTitleBar alloc] initWithDisplay:display];
     [frameWindow createFrameForWindow:win];
     [titleBar createTitleBarForFrame:frameWindow];
+    //[titleBar setBackgroundImage:[[NSString alloc] initWithString:@"/home/alex/Immagini/titleback.xpm"]];
     [frameWindow reparentChildWindow:win atX:0 andY:[titleBar height]];
     [win setBrother:titleBar];
     [frameWindow reparentChildWindow:titleBar atX:0 andY:0];

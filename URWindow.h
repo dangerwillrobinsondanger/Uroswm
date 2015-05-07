@@ -20,6 +20,8 @@
     Window brother;
     Display *dpy;
     BOOL framed;
+    XImage *backgroundImage;
+    GC graphicContext;
     
     int width, height;
 }
@@ -58,4 +60,7 @@
 -(int)height;
 /** Returns the width of the window */
 -(int)width;
+
+-(void)setBackgroundImage:(NSString*)imagePath;
+-(XImage*)backgroundImage;
 @end

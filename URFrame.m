@@ -28,7 +28,7 @@
 
 -(void)createFrameForWindow:(URWindow*)window
 {
-    unsigned int BORDER_WIDTH = 3;
+    unsigned int BORDER_WIDTH = 0;
     unsigned long BORDER_COLOR = 0xff0000;
     unsigned long BG_COLOR = 0x0000ff;
     

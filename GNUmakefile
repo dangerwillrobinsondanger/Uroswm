@@ -24,6 +24,7 @@ uroswm_TOOL_ICON =
 #
 uroswm_RESOURCE_FILES = \
 Resources/Version \
+titleback.xpm
 
 
 #
@@ -56,7 +57,7 @@ main.m
 ADDITIONAL_OBJCFLAGS += -g -std=c99 -fobjc-arc
 
 # Additional flags to pass to C compiler
-ADDITIONAL_LDFLAGS += -lX11
+ADDITIONAL_LDFLAGS += -lX11 -lXpm
 
 #
 # Makefiles

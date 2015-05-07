@@ -10,6 +10,7 @@
 */
 
 #import "URWindow.h"
+#include <X11/xpm.h>
 
 @implementation URWindow
 
@@ -70,4 +71,18 @@
 {
     return width;
 }
+
+-(void)setBackgroundImage:(NSString*)imagePath
+{
+    if (XpmReadFileToImage (dpy, [imagePath cString], &backgroundImage, NULL, NULL)) 
+    {
+      NSLog(@"Error reading the image file");
+    }
+}
+
+-(XImage*)backgroundImage
+{
+    return backgroundImage;
+}
+
 @end
