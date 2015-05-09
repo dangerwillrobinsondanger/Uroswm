@@ -28,6 +28,7 @@
     display = disp;
     windowsDict = [[NSMutableDictionary alloc]init];
     rootWindow = RootWindow(display, DefaultScreen(display));
+    //workspace = [NSWorkspace sharedWorkspace];
     return self;
 }
 
@@ -68,13 +69,18 @@
     URTitleBar *titleBar = [[URTitleBar alloc] initWithDisplay:display];
     [frameWindow createFrameForWindow:win];
     [titleBar createTitleBarForFrame:frameWindow];
-    //[titleBar setBackgroundImage:[[NSString alloc] initWithString:@"/home/alex/Immagini/titleback.xpm"]];
     [frameWindow reparentChildWindow:win atX:0 andY:[titleBar height]];
     [win setBrother:titleBar];
     [frameWindow reparentChildWindow:titleBar atX:0 andY:0];
     [windowsDict setObject:frameWindow forKey:[NSString stringWithFormat:@"%lu",[win xWindow]]];
     [win mapWindow];
-    NSLog(@"Il dizionario %@", windowsDict);
+    /*[[workspace notificationCenter]
+                       postNotificationName: @"AZXWindowDidLaunchNotification"
+                       object: workspace
+                       userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
+           [NSString stringWithFormat: @"%lu", [win xWindow]], @"AZXWindowID",
+                                 nil]];*/
+    NSLog(@"The Dictionary %@", windowsDict);
 }
 
 - (void) handleConfigureRequestEvent:(XEvent)theEvent

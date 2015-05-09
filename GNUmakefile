@@ -57,7 +57,7 @@ main.m
 ADDITIONAL_OBJCFLAGS += -g -std=c99 -fobjc-arc
 
 # Additional flags to pass to C compiler
-ADDITIONAL_LDFLAGS += -lX11 -lXpm
+ADDITIONAL_LDFLAGS += -lX11 -lXpm -lgnustep-gui
 
 #
 # Makefiles

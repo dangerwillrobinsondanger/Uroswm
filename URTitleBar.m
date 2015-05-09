@@ -42,12 +42,13 @@
     [self setBackgroundImage:imagePath];
     graphicContext = XCreateGC(dpy,xWindow,0,NULL);
     NSLog(@"asd %d e %d", backgroundImage->width,backgroundImage->height);
-    /* ↓ this is not working!*/
-    Pixmap pix = XCreatePixmap(dpy,xWindow,backgroundImage->width,backgroundImage->height,0);
+    /* ↓ Use XReneder to enlarge the image to fit the whole titlebar window!*/
     
+    Pixmap pix = XCreatePixmap(dpy,xWindow,backgroundImage->width,backgroundImage->height,XDefaultDepth(dpy,XDefaultScreen(dpy)));
     XPutImage(dpy,pix,graphicContext,backgroundImage,0,0,0,0,backgroundImage->width,backgroundImage->height);
     XSetWindowBackgroundPixmap(dpy, xWindow, pix);
-    //XFreeGC(dpy,graphicContext);
     XFlushGC(dpy,graphicContext);
+    XFreeGC(dpy,graphicContext);
+    XFreePixmap(dpy,pix);
 }
 @end

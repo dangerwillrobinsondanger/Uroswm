@@ -18,6 +18,7 @@
 #define _URNOTIFICATIONHANDLER_H_
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 #include <X11/Xlib.h>
 
@@ -32,6 +33,7 @@
     //frame position
     NSPoint startFramePosition;
     NSSize frameSize;
+    //NSWorkspace *workspace;
 }
 
 -(id)initWithDisplay:(Display*)disp;
