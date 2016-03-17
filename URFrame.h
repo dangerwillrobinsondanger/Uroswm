@@ -12,6 +12,9 @@
 /**
   * This class implements a frame window
  */
+ 
+#ifndef _URFRAME_H_
+#define _URFRAME_H_
 
 #import <Foundation/Foundation.h>
 #import "URWindow.h"
@@ -38,4 +41,6 @@
  * Returns the children dictionary
  */
 -(NSDictionary*)children;
+
+#endif // _URFRAME_H
 @end

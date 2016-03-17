@@ -35,7 +35,8 @@ UrosWindowManager.h \
 URNotificationHandler.h \
 URWindow.h \
 URFrame.h \
-URTitleBar.h
+URTitleBar.h \
+URDecorationButton.h
 
 #
 # Objective-C Class files
@@ -45,7 +46,8 @@ UrosWindowManager.m \
 URNotificationHandler.m \
 URWindow.m \
 URFrame.m \
-URTitleBar.m
+URTitleBar.m \
+URDecorationButton.m
 
 #
 # Other sources

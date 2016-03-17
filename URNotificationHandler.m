@@ -70,7 +70,7 @@
     [frameWindow createFrameForWindow:win];
     [titleBar createTitleBarForFrame:frameWindow];
     [frameWindow reparentChildWindow:win atX:0 andY:[titleBar height]];
-    [win setBrother:titleBar];
+    [win setBrother:titleBar];//generates a badmatch
     [frameWindow reparentChildWindow:titleBar atX:0 andY:0];
     [windowsDict setObject:frameWindow forKey:[NSString stringWithFormat:@"%lu",[win xWindow]]];
     [win mapWindow];

@@ -11,6 +11,9 @@
 
 /* This class implements the title bar */
 
+#ifndef _URTITLEBAR_H_
+#define _URTITLEBAR_H_
+
 #import <Foundation/Foundation.h>
 #import "URFrame.h"
 
@@ -23,3 +26,5 @@
 -(NSMutableString*) title;
 -(void)createTitleBarForFrame:(URFrame*)aFrameWindow;
 @end
+
+#endif // _URTTILEBAR_H_

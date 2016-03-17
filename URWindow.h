@@ -9,6 +9,9 @@
 
 */
 
+#ifndef _URWINDOW_H_
+#define _URWINDOW_H_
+
 #import <Foundation/Foundation.h>
 
 #include <X11/Xlib.h>
@@ -64,3 +67,5 @@
 -(void)setBackgroundImage:(NSString*)imagePath;
 -(XImage*)backgroundImage;
 @end
+
+#endif // _URWINDOW_H_

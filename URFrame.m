@@ -35,7 +35,7 @@
     XWindowAttributes windowAttributes;
     XGetWindowAttributes(dpy, [window xWindow], &windowAttributes);
     width = windowAttributes.width;
-    height = windowAttributes.height+10;
+    height = windowAttributes.height+16;
     
     xWindow = XCreateSimpleWindow(dpy,rootWindow,windowAttributes.x,
                                                      windowAttributes.y,
